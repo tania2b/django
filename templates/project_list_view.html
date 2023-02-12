@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Projects List{% endblock %}
+<img src="{{ user.userprofile.avatar.avatar_url }}" alt="{{ user.username }}">
+{% block body_content %}
+    <div class="project-wrapper">
+        <div class="text-right mb-2" >
+            <a href="{% url 'index' %}"><img class="icon-home" src="/static/images/home_white.png"></a>
+        </div>
+        {% if user.is_authenticated %}
+            Bonjour {{ user.username }}!
+            <h2>Projets assignés :</h2>
+            <div class="tag-filter mt-4">
+                {% for tag in tags %}
+                    <button type="button" id="{{ tag.id }}" class="btn btn-outline-success tag-button">{{ tag.name }}</button>
+                {% endfor %}
+            </div>
+            {% for project in object_list.distinct %}
+                {{ project.id }} {{ project.tag }}
+                <ul class="project mt-4" {% if project.tags.all  %}data-tags="{% for tag in project.tags.all %}{{ tag.id }},{% endfor %}"{% endif %}>
+                    <li>
+                        <a href="{% url 'project_detail' project.max_id %}">
+                        {{ project.title }}
+                        <br>
+                        {% for tag in project.tags.all %}
+                           {{ tag.name }}
+                        {% endfor %}
+                        </a>
+                    </li>
+                    <div class="progress mx-auto">
+                        <div class="progress-bar" role="progressbar" style="width: {{ progress }}%"></div>
+                        {{ project.progress }}
+                    </div>
+                </ul>
+                {% empty %}
+                    Aucun projet en cours pour vous
+            {% endfor %}
+            <br>
+            <div>
+                <a class="btn rounded-5 bg-green mb-5 sm-w-100" href="{% url 'project_create' %}">
+                    + Nouveau projet
+                </a><br>
+                <a class="btn rounded-5 bg-green mb-3 sm-w-100" href="{% url 'task_list' %}">
+                     Tâches du jour
+                 </a><br>
+                <a class="btn rounded-5 bg-green sm-w-100" href="{% url 'project_list' %}">
+                    Ensemble des projets
+                </a>
+            </div>
+            {% else %}
+                <div class="row w-100 vh-90 d-flex justify-content-center align-items-center">
+                    <img src="static/images/todo.jpg" class="w-25"/>
+                    <div class="mx-5 text-center">
+                        <h1>Bienvenue !</h1>
+                        <h2>Vous n'êtes pas connecté,</h2>
+                        <a class="btn rounded-5 bg-green my-3" href="{% url 'login' %}">Se connecter</a><br/>
+                        <a class="btn rounded-5 bg-green my-3" href="{% url 'register' %}">S'enregistrer</a>
+                    </div>
+                </div>
+        {% endif %}
+
+    </div>
+
+<!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+<script>
+$(document).ready(function() {
+  $('.tag-button').on('click', function() {
+    var selectedTags = [];
+    $('.tag-button.active').each(function() {
+      selectedTags.push(parseInt($(this).val()));
+    });
+
+    $('.project').each(function() {
+      var projectTags = $(this).data('tags').split(',').map(Number);
+      var match = projectTags.some(function(tag) {
+        return selectedTags.includes(tag);
+      });
+      if (match) {
+        $(this).show();
+      } else {
+        $(this).hide();
+      }
+    });
+  });
+});
+</script>
+
+{% endblock %}

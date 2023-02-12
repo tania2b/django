@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Mettre à jour le nom d'utilisateur</h2>
+    <form method="post" class="form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="Username">Nouveau nom d'utilisateur :</label>
+            <input type="text" class="form-control" id="username" name="username">
+        </div>
+        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+    </form>
+</div>
+{% endblock %}

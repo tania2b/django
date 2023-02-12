@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %} index {% endblock %}
+
+{% block body_content %}
+{% if user.is_authenticated %}
+<!--
+  <img src="{{ user.userprofile.profile_picture.url  }}">
+  <img src="{{ user.userprofile.avatar.avatar_url }}" alt="{{ user.username }}">
+-->
+    <div class="row w-100 d-flex justify-content-center align-items-center m-auto min-vh-95">
+        <div class="mx-5 text-center">
+            <img src="static/images/image5.jpg" class="w-50 rounded-circle mb-5"/>
+            <h2>Bienvenue {{ user.username }} !</h2>
+            <p class="text-green"> {{ user.email }} </p>
+            <a class="btn rounded-5 bg-green my-3 w-100" href="{% url 'update_username' %}">Modifier votre nom d'utilisateur </a><br>
+            <a class="btn rounded-5 bg-green my-3 w-100" href="{% url 'password_change' %}">Modifier votre mot de passe </a><br>
+            <a class="btn rounded-5 bg-green my-3 w-100" href="{% url 'logout' %}">Se déconnecter</a>
+        </div>
+        <div class="mx-5 text-center">
+            <h1>Jetez un oeil</h1>
+            <h2>Restez productif</h2>
+            <a class="btn rounded-5 bg-green my-3 w-100" href="{% url 'my_project_list' %}">Mes projets</a><br>
+            <a class="btn rounded-5 bg-green my-3 w-100" href="{% url 'task_list' %}">Tâches du jour</a><br>
+            <a class="btn rounded-5 bg-green my-3 w-100" href="{% url 'project_list' %}">Ensemble des projets</a><br>
+            <a class="btn rounded-5 bg-green my-3 w-100" href="{% url 'task_calendar' %}">Calendrier des tâches</a><br>
+        </div>
+    </div>
+
+{% else %}
+    <div class="row w-100 vh-90 d-flex justify-content-center align-items-center">
+        <img src="static/images/todo.jpg" class="w-25"/>
+        <div class="mx-5 text-center">
+            <h1>Bienvenue !</h1>
+            <h2>Vous n'êtes pas connecté,</h2>
+            <a class="btn rounded-5 bg-green my-3" href="{% url 'login' %}">Se connecter</a><br/>
+            <a class="btn rounded-5 bg-green my-3" href="{% url 'register' %}">S'enregistrer</a>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}

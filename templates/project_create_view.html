@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Nouveau Projet{% endblock %}
+
+{% block body_content %}
+    <div class="project-wrapper">
+        <div class="text-right mb-2" >
+            <a href="{% url 'index' %}">Home</a>
+        </div>
+        <h2>Nouveau projet</h2>
+        <form method="post" class="mt-5">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button class="btn rounded-5 bg-green my-3 sm-w-100"
+                    type="submit">
+                Créer
+            </button>
+
+        </form>
+        <a class="btn rounded-5 bg-green mb-5 sm-w-100"
+           href="{% url 'my_project_list' %}">
+            &laquo; Mes Projets
+        </a>
+    </div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ object.title }}{% endblock %}
+
+{% block body_content %}
+    <div class="project-wrapper">
+        <div class="text-right mb-2" >
+            <a href="{% url 'index' %}"><img class="icon-home" src="/static/images/home_white.png"></a>
+        </div>
+
+        <h1>{{ project.title }}</h1>
+        <p>{{ project.description }}</p>
+
+        <h2>Tasks</h2>
+        {% if user.is_authenticated %}
+            <ul>
+              {% for task in project.get_tasks %}
+                  {% if task.assigned_to == user %}
+                      <li class="{% if task.complete %}complete{% endif %}">
+                          {{ task.title }} <br>
+                          Attribuée à : {{ task.assigned_to }} <br>
+                          {{ task.due_date }} <br>
+                          <a href="{% url 'task_update' task.id %}">Modifier</a>
+                          <a href="{% url 'task_delete' task.id %}">Supprimer</a>
+                      </li>
+                  {% endif %}
+                {% empty %}
+                  Aucune tâche pour ce projet
+              {% endfor %}
+            </ul>
+            <div>
+                <a class="btn rounded-5 bg-green mb-5 sm-w-100" href="{% url 'task_create' project.id %}">
+                    + Nouvelle tâche
+                </a><br>
+                <a class="btn rounded-5 bg-green mb-3 sm-w-100" href="{% url 'task_list' %}">
+                     Tâches du jour
+                 </a>
+            </div>
+        {% else %}
+                <div class="row w-100 vh-90 d-flex justify-content-center align-items-center">
+                    <img src="static/images/todo.jpg" class="w-25"/>
+                    <div class="mx-5 text-center">
+                        <h1>Bienvenue !</h1>
+                        <h2>Vous n'êtes pas connecté,</h2>
+                        <a class="btn rounded-5 bg-green my-3" href="{% url 'login' %}">Se connecter</a><br/>
+                        <a class="btn rounded-5 bg-green my-3" href="{% url 'register' %}">S'enregistrer</a>
+                    </div>
+                </div>
+        {% endif %}
+
+    </div>
+
+{% endblock %}
+

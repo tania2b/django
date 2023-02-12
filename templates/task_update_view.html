@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Modifier Tâche{% endblock %}
+
+{% block body_content %}
+    <div class="project-wrapper">
+        <div class="text-right mb-2" >
+            <a href="{% url 'index' %}"><img class="icon-home" src="/static/images/home_white.png"></a>
+        </div>
+        <h2>Modifier tâche</h2>
+        <form method="post" class="mt-5">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button class="btn rounded-5 bg-green my-3 sm-w-100"
+                    type="submit">
+                Enregistrer
+            </button>
+        </form>
+        <a class="btn rounded-5 bg-green mb-5 sm-w-100"
+           href="{% url 'my_project_list' %}">
+            Annuler
+        </a>
+    </div>
+{% endblock %}

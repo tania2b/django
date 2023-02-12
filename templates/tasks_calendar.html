@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <div id="calendar"></div>
+  <script>
+    $(document).ready(function() {
+      $('#calendar').datepicker({
+        dateFormat: 'yy-mm-dd',
+        beforeShowDay: function(date) {
+          var tasks = {{ tasks|safe }};
+          for (var i = 0; i < tasks.length; i++) {
+            if (tasks[i].due_date === date.toJSON().slice(0, 10)) {
+              return [true, 'event', tasks[i].title];
+            }
+          }
+          return [true, ''];
+        },
+        onSelect: function(date) {
+          var tasks = {{ tasks|safe }};
+          for (var i = 0; i < tasks.length; i++) {
+            if (tasks[i].due_date.toJSON().slice(0, 10) === date) {
+              window.location.href = "{% url 'task_detail' task.id %}";
+              break;
+            }
+          }
+        }
+      });
+    });
+  </script>
+{% endblock %}

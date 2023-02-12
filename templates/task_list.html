@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Tags list :{% endblock %}
+
+{% block body_content %}
+    <div class="project-wrapper">
+        <div class="text-right mb-2" >
+            <a href="{% url 'index' %}"><img class="icon-home" src="/static/images/home_white.png"></a>
+        </div>
+        {% if user.is_authenticated %}
+          Bonjour {{ user.username }} !
+
+            <h2>Tâches du jour</h2>
+            <ul>
+               {% for task in object_list %}
+                   {% if task.assigned_to == user %}
+                      <li>
+                          {{ task.title }} - {{ task.due_date }} <br>
+                          <a href="{% url 'task_update' task.id %}">Modifier</a>
+                      </li>
+
+                   {% endif %}
+                   {% empty %}
+                       Aucune tâche pour aujourd'hui !
+              {% endfor %}
+            </ul>
+            <div>
+             <a class="btn rounded-5 bg-green mb-3 sm-w-100" href="{% url 'my_project_list' %}">
+                 Mes projets
+             </a><br>
+             <a class="btn rounded-5 bg-green sm-w-100" href="{% url 'project_list' %}">
+                 Ensemble des projets
+             </a>
+          </div>
+        {% else %}
+          <div class="row w-100 vh-90 d-flex justify-content-center align-items-center">
+              <img src="/static/images/todo.jpg" class="w-25"/>
+              <div class="mx-5 text-center">
+                  <h1>Bienvenue !</h1>
+                  <h2>Vous n'êtes pas connecté,</h2>
+                  <a class="btn rounded-5 bg-green my-3" href="{% url 'login' %}">Se connecter</a><br/>
+                  <a class="btn rounded-5 bg-green my-3" href="{% url 'register' %}">S'enregistrer</a>
+               </div>
+          </div>
+        {% endif %}
+{% endblock %}
